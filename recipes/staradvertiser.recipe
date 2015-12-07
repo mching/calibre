@@ -1,5 +1,5 @@
 __license__   = 'GPL v3'
-__copyright__ = '2011, M. Ching modified from work 2009-2011 Darko Miletic <darko.miletic at gmail.com>'
+__copyright__ = '2015, M. Ching modified from work 2009-2011 Darko Miletic <darko.miletic at gmail.com>'
 '''
 staradvertiser.com
 '''
@@ -7,7 +7,7 @@ staradvertiser.com
 from calibre.web.feeds.news import BasicNewsRecipe
 
 class Starbulletin(BasicNewsRecipe):
-    title                 = 'Honolulu Star-Advertiser'
+    title                 = 'Honolulu Star-Advertiser-edit'
     __author__            = 'Darko Miletic'
     description           = 'Latest national and local Hawaii sports news'
     publisher             = 'Honolulu Star-Advertiser'
@@ -20,7 +20,7 @@ class Starbulletin(BasicNewsRecipe):
     use_embedded_content  = False
     encoding              = 'utf8'
     publication_type      = 'newspaper'
-    masthead_url          = 'http://media.staradvertiser.com/designimages/star-advertiser-logo-small.gif'
+    masthead_url          = 'https://sa-media.s3.amazonaws.com/images/redesign/star-advertiser-logo.svg'
 #    extra_css             = """
 #                                body{font-family: Verdana,Arial,Helvetica,sans-serif}
 #                                h1,.brown,.hsa_postCredit{color: #663300}
@@ -54,19 +54,20 @@ class Starbulletin(BasicNewsRecipe):
     def get_browser(self):
         br = BasicNewsRecipe.get_browser(self)
         if self.username is not None and self.password is not None:
-            br.open('http://www.staradvertiser.com/manage/Login/')
-            br.select_form(name='loginForm')
-            br['email']   = self.username
-            br['password'] = self.password
+            br.open('https://www.staradvertiser.com/user-access/')
+            br.select_form(nr = 0)
+            br['login-username']   = self.username
+            br['login-password'] = self.password
             br.submit()
         return br
 
     feeds          = [
-		       (u'Breaking News', u'http://www.staradvertiser.com/news/breaking/index.rss')
-		      ,(u'News', u'http://www.staradvertiser.com/newspremium/index.rss')
-		      ,(u'Business', u'http://www.staradvertiser.com/businesspremium/index.rss')
-		      ,(u'Sports', u'http://www.staradvertiser.com/sportspremium/index.rss')
-		      ,(u'Features', u'http://www.staradvertiser.com/featurespremium/index.rss')
+		       (u'Top News', u'http://www.staradvertiser.com/category/breaking-news/feed/')
+		      ,(u'Hawaii News', u'http://www.staradvertiser.com/category/hawaii-news/feed/')
+		      ,(u'Business', u'http://www.staradvertiser.com/category/business/feed/')
+		      ,(u'Sports', u'http://www.staradvertiser.com/category/sports/feed/')
+		      ,(u'Features', u'http://www.staradvertiser.com/category/features/feed/')
+      		      ,(u'Editorial', u'http://www.staradvertiser.com/category/editorial/feed/')
 		     ]
 
     def preprocess_html(self, soup):
